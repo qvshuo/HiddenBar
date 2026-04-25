@@ -17,9 +17,9 @@
 		A7B8C9D0E1F23A4B5C6D7E8F /* MenuBarConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7C8D9E0F12A3B4C5D6E7F80 /* MenuBarConfiguration.swift */; };
 		A8B9C0D1E2F34A5B6C7D8E9F /* MenuBarLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C9D0E1F23A4B5C6D7E8F90 /* MenuBarLayout.swift */; };
 		A9B0C1D2E3F45A6B7C8D9E0F /* MenuBarPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C0D1E2F34A5B6C7D8E9F01 /* MenuBarPresentation.swift */; };
-		AAC1D2E3F4A56B7C8D9E0F12 /* MenuBarLayoutEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAC1D2E3F4A56B7C8D9E0F1 /* MenuBarLayoutEngine.swift */; };
-		ABC2D3E4F5A67B8C9D0E1F23 /* SystemStatusItemHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBC2D3E4F5A67B8C9D0E1F2 /* SystemStatusItemHost.swift */; };
-		ACC3D4E5F6A78B9C0D1E2F34 /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC3D4E5F6A78B9C0D1E2F3 /* MenuBarController.swift */; };
+		AAC1D2E3F4A56B7C8D9E0F12 /* MenuBarLayoutEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAC1D2E3F4A56B7C8D9E0F12 /* MenuBarLayoutEngine.swift */; };
+		ABC2D3E4F5A67B8C9D0E1F23 /* SystemStatusItemHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBC2D3E4F5A67B8C9D0E1F23 /* SystemStatusItemHost.swift */; };
+		ACC3D4E5F6A78B9C0D1E2F34 /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC3D4E5F6A78B9C0D1E2F34 /* MenuBarController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,9 +35,9 @@
 		B7C8D9E0F12A3B4C5D6E7F80 /* MenuBarConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarConfiguration.swift; sourceTree = "<group>"; };
 		B8C9D0E1F23A4B5C6D7E8F90 /* MenuBarLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarLayout.swift; sourceTree = "<group>"; };
 		B9C0D1E2F34A5B6C7D8E9F01 /* MenuBarPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarPresentation.swift; sourceTree = "<group>"; };
-		BAC1D2E3F4A56B7C8D9E0F1 /* MenuBarLayoutEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarLayoutEngine.swift; sourceTree = "<group>"; };
-		BBC2D3E4F5A67B8C9D0E1F2 /* SystemStatusItemHost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemStatusItemHost.swift; sourceTree = "<group>"; };
-		BCC3D4E5F6A78B9C0D1E2F3 /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
+		BAC1D2E3F4A56B7C8D9E0F12 /* MenuBarLayoutEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarLayoutEngine.swift; sourceTree = "<group>"; };
+		BBC2D3E4F5A67B8C9D0E1F23 /* SystemStatusItemHost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemStatusItemHost.swift; sourceTree = "<group>"; };
+		BCC3D4E5F6A78B9C0D1E2F34 /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,9 +105,9 @@
 		C3D4E5F6A7B8091A2B3C4D5E /* MenuBar */ = {
 			isa = PBXGroup;
 			children = (
-				BCC3D4E5F6A78B9C0D1E2F3 /* MenuBarController.swift */,
-				BBC2D3E4F5A67B8C9D0E1F2 /* SystemStatusItemHost.swift */,
-				BAC1D2E3F4A56B7C8D9E0F1 /* MenuBarLayoutEngine.swift */,
+				BCC3D4E5F6A78B9C0D1E2F34 /* MenuBarController.swift */,
+				BBC2D3E4F5A67B8C9D0E1F23 /* SystemStatusItemHost.swift */,
+				BAC1D2E3F4A56B7C8D9E0F12 /* MenuBarLayoutEngine.swift */,
 			);
 			path = MenuBar;
 			sourceTree = "<group>";
@@ -139,18 +139,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1540;
+				LastSwiftUpdateCheck = 2641;
 				LastUpgradeCheck = 2640;
 				ORGANIZATIONNAME = "An Jing";
 				TargetAttributes = {
 					929113F021F9D04100173149 = {
-						CreatedOnToolsVersion = 10.1;
-						LastSwiftMigration = 1130;
-						SystemCapabilities = {
-							com.apple.Sandbox = {
-								enabled = 1;
-							};
-						};
+						CreatedOnToolsVersion = 26.0;
 					};
 				};
 			};
@@ -249,7 +243,6 @@
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -262,7 +255,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -323,7 +315,6 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
