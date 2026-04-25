@@ -7,6 +7,7 @@ final class MenuBarStore {
     static let shared = MenuBarStore()
 
     private static let toggleDebounceInterval: Duration = .seconds(0.3)
+    private static let autoHideInterval: Duration = .seconds(15)
 
     var appState = AppState()
 
@@ -14,6 +15,8 @@ final class MenuBarStore {
     private lazy var controller = MenuBarController(state: self)
     @ObservationIgnored
     private var toggleDebounceTask: Task<Void, Never>?
+    @ObservationIgnored
+    private var autoHideTask: Task<Void, Never>?
     @ObservationIgnored
     private var isToggleDebounced = false
     @ObservationIgnored
@@ -38,17 +41,23 @@ final class MenuBarStore {
     }
 
     func send(_ action: AppAction) {
-        let effect = reduce(action)
+        let effects = reduce(action)
 
-        switch effect {
-        case .none:
-            break
-        case .scheduleToggleDebounceReset:
-            scheduleToggleDebounceReset()
-        case .applyCurrentMode:
-            controller.applyCurrentMode()
-        case .quit:
-            NSApp.terminate(nil)
+        for effect in effects {
+            switch effect {
+            case .none:
+                break
+            case .scheduleToggleDebounceReset:
+                scheduleToggleDebounceReset()
+            case .scheduleAutoHide:
+                scheduleAutoHide()
+            case .cancelAutoHide:
+                cancelAutoHide()
+            case .applyCurrentMode:
+                controller.applyCurrentMode()
+            case .quit:
+                NSApp.terminate(nil)
+            }
         }
     }
 
@@ -58,24 +67,42 @@ final class MenuBarStore {
         startControllerIfNeeded()
     }
 
-    private func reduce(_ action: AppAction) -> Effect {
+    private func reduce(_ action: AppAction) -> [Effect] {
         switch action {
         case .quitRequested:
-            return .quit
+            return [.cancelAutoHide, .quit]
 
         case .menuBarToggleRequested:
-            guard !isToggleDebounced else { return .none }
+            guard !isToggleDebounced else { return [.none] }
 
             isToggleDebounced = true
             appState.mode.toggle()
-            return .scheduleToggleDebounceReset
+
+            if appState.mode == .expanded {
+                return [.scheduleToggleDebounceReset, .scheduleAutoHide]
+            } else {
+                return [.scheduleToggleDebounceReset, .cancelAutoHide]
+            }
 
         case .alwaysHiddenToggleRequested:
             appState.alwaysHiddenVisible.toggle()
-            return .applyCurrentMode
+
+            if appState.mode == .expanded {
+                return [.applyCurrentMode, .scheduleAutoHide]
+            } else {
+                return [.applyCurrentMode]
+            }
 
         case .screenParametersChanged:
-            return .applyCurrentMode
+            return [.applyCurrentMode]
+
+        case .autoHideTimerFired:
+            guard appState.mode == .expanded else {
+                return [.cancelAutoHide]
+            }
+
+            appState.mode = .collapsed
+            return [.applyCurrentMode, .cancelAutoHide]
         }
     }
 
@@ -93,9 +120,26 @@ final class MenuBarStore {
         }
     }
 
+    private func scheduleAutoHide() {
+        autoHideTask?.cancel()
+        autoHideTask = Task { @MainActor [weak self] in
+            try? await Task.sleep(for: Self.autoHideInterval)
+            guard let self, !Task.isCancelled else { return }
+            self.autoHideTask = nil
+            self.send(.autoHideTimerFired)
+        }
+    }
+
+    private func cancelAutoHide() {
+        autoHideTask?.cancel()
+        autoHideTask = nil
+    }
+
     enum Effect {
         case none
         case scheduleToggleDebounceReset
+        case scheduleAutoHide
+        case cancelAutoHide
         case applyCurrentMode
         case quit
     }

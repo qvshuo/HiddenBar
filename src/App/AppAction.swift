@@ -3,4 +3,5 @@ enum AppAction {
     case alwaysHiddenToggleRequested
     case screenParametersChanged
     case quitRequested
+    case autoHideTimerFired
 }
