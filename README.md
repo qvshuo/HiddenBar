@@ -14,9 +14,15 @@ This project is a rewritten version of [dwarvesf/hidden](https://github.com/dwar
 
 Download the pre-built app from [GitHub Releases](https://github.com/qvshuo/HiddenBar/releases/latest), unzip, and move it to your **Applications** folder.
 
+Before launching the app, run:
+
+```bash
+xattr -cr "/Applications/Hidden Bar.app"
+```
+
 ### Build from source
 
-Open `Hidden Bar.xcodeproj` in Xcode and build with **⌘B**.
+Open `Hidden Bar.xcodeproj` in Xcode and build.
 
 ## Usage
 
