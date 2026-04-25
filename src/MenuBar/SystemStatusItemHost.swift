@@ -78,29 +78,6 @@ final class SystemStatusItemHost: NSObject, NSMenuDelegate {
         schedulePendingApply()
     }
 
-    func removeStatusItems() {
-        pendingApplyTask?.cancel()
-        pendingApplyTask = nil
-        isApplyScheduled = false
-        pendingLayout = nil
-
-        if let toggleItem {
-            toggleItem.menu = nil
-            NSStatusBar.system.removeStatusItem(toggleItem)
-            self.toggleItem = nil
-        }
-
-        if let primarySeparatorItem {
-            NSStatusBar.system.removeStatusItem(primarySeparatorItem)
-            self.primarySeparatorItem = nil
-        }
-
-        if let alwaysHiddenSeparatorItem {
-            NSStatusBar.system.removeStatusItem(alwaysHiddenSeparatorItem)
-            self.alwaysHiddenSeparatorItem = nil
-        }
-    }
-
     @objc
     private func handleToggleClick(_ sender: NSStatusBarButton) {
         guard let event = NSApp.currentEvent else {
@@ -130,7 +107,7 @@ final class SystemStatusItemHost: NSObject, NSMenuDelegate {
         let menu = NSMenu()
         menu.delegate = self
         menu.addItem(
-            NSMenuItem(title: "Quit Hidden Bar", action: #selector(quitApplication), keyEquivalent: "q")
+            NSMenuItem(title: "Quit Hidden Bar", action: #selector(quitApplication), keyEquivalent: "")
         )
         menu.items.forEach { $0.target = self }
         return menu
@@ -149,14 +126,11 @@ final class SystemStatusItemHost: NSObject, NSMenuDelegate {
     private func toggleImage() -> NSImage {
         let diameter: CGFloat = 5
         let size = NSSize(width: diameter, height: diameter)
-        let image = NSImage(size: size)
-
-        image.lockFocus()
-        NSColor.white.setFill()
-        NSBezierPath(ovalIn: NSRect(origin: .zero, size: size)).fill()
-        image.unlockFocus()
-
-        return image
+        return NSImage(size: size, flipped: false) { rect in
+            NSColor.white.setFill()
+            NSBezierPath(ovalIn: rect).fill()
+            return true
+        }
     }
 
     private func primarySeparatorImage() -> NSImage {
@@ -170,21 +144,19 @@ final class SystemStatusItemHost: NSObject, NSMenuDelegate {
     private func separatorImage(dashPattern: [CGFloat]?) -> NSImage {
         let lineWidth: CGFloat = 2
         let size = NSSize(width: lineWidth, height: 18)
-        let image = NSImage(size: size)
-        image.isTemplate = true
-
-        image.lockFocus()
-        let path = NSBezierPath()
-        path.move(to: NSPoint(x: lineWidth / 2, y: 2))
-        path.line(to: NSPoint(x: lineWidth / 2, y: size.height - 2))
-        path.lineWidth = lineWidth
-        if let dashPattern {
-            path.setLineDash(dashPattern, count: dashPattern.count, phase: 0)
+        let image = NSImage(size: size, flipped: false) { _ in
+            let path = NSBezierPath()
+            path.move(to: NSPoint(x: lineWidth / 2, y: 2))
+            path.line(to: NSPoint(x: lineWidth / 2, y: size.height - 2))
+            path.lineWidth = lineWidth
+            if let dashPattern {
+                path.setLineDash(dashPattern, count: dashPattern.count, phase: 0)
+            }
+            NSColor.black.setStroke()
+            path.stroke()
+            return true
         }
-        NSColor.black.setStroke()
-        path.stroke()
-        image.unlockFocus()
-
+        image.isTemplate = true
         return image
     }
 
@@ -219,9 +191,10 @@ final class SystemStatusItemHost: NSObject, NSMenuDelegate {
             alwaysHiddenSeparatorItem = nil
         }
 
+        primarySeparatorItem.length = pendingLayout.primarySeparatorLength
+
         guard hasValidOrdering else { return }
 
-        primarySeparatorItem.length = pendingLayout.primarySeparatorLength
         alwaysHiddenSeparatorItem?.length = pendingLayout.alwaysHiddenSeparatorLength
     }
 }
