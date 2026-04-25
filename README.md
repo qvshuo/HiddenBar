@@ -4,7 +4,7 @@
 
 # Hidden Bar
 
-Hidden Bar helps you hide menu bar items for a cleaner, more minimal macOS experience.
+A modern, lightweight macOS utility that hides menu bar icons.
 
 This project is a modern rewrite of [dwarvesf/hidden](https://github.com/dwarvesf/hidden).
 
