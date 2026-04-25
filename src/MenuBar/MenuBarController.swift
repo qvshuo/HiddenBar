@@ -8,15 +8,10 @@ final class MenuBarController {
     var onToggleRequested: (@MainActor () -> Void)?
     var onAlwaysHiddenToggleRequested: (@MainActor () -> Void)?
     var onScreenParametersChanged: (@MainActor () -> Void)?
-    var onInstallationStarted: (@MainActor () -> Void)?
-    var onAwaitingOrderingValidation: (@MainActor () -> Void)?
-    var onPresentationApplied: (@MainActor () -> Void)?
-    var onRetryScheduled: (@MainActor (Int) -> Void)?
-    var onDegraded: (@MainActor () -> Void)?
     var onQuitRequested: (@MainActor () -> Void)?
 
     @ObservationIgnored
-    private let state: MenuBarStore
+    private weak var state: MenuBarStore?
     private let host: SystemStatusItemHost
     private let layoutEngine: MenuBarLayoutEngine
     private var didStart = false
@@ -57,51 +52,30 @@ final class MenuBarController {
         Task { @MainActor [weak self] in
             await Task.yield()
             guard let self else { return }
-            self.onInstallationStarted?()
             self.host.installStatusItems()
             self.applyCurrentMode()
             self.scheduleInitialRetries()
         }
     }
 
-    func stop() {
-        observationTask?.cancel()
-        observationTask = nil
-        observationGeneration += 1
-        screenChangeTask?.cancel()
-        screenChangeTask = nil
-        cancelPendingRetries()
-        host.removeStatusItems()
-        host.onToggle = nil
-        host.onAlternateToggle = nil
-        host.onQuit = nil
-        onToggleRequested = nil
-        onAlwaysHiddenToggleRequested = nil
-        onScreenParametersChanged = nil
-        onInstallationStarted = nil
-        onAwaitingOrderingValidation = nil
-        onPresentationApplied = nil
-        onRetryScheduled = nil
-        onDegraded = nil
-        onQuitRequested = nil
-        didStart = false
-    }
-
     func applyCurrentMode() {
-        let presentation = currentPresentation(screenWidth: host.currentScreenWidth)
+        guard let presentation = currentPresentation(screenWidth: host.currentScreenWidth) else {
+            return
+        }
+
         host.setPresentation(
             alwaysHiddenEnabled: presentation.alwaysHiddenEnabled,
             layout: presentation.layout
         )
 
         if host.hasValidOrdering {
-            onPresentationApplied?()
-        } else {
-            onAwaitingOrderingValidation?()
+            cancelPendingRetries()
         }
     }
 
-    private func currentPresentation(screenWidth: CGFloat) -> MenuBarPresentation {
+    private func currentPresentation(screenWidth: CGFloat) -> MenuBarPresentation? {
+        guard let state else { return nil }
+
         let layout = layoutEngine.makeLayout(
             mode: state.appState.mode,
             alwaysHiddenVisible: state.appState.alwaysHiddenVisible,
@@ -123,9 +97,10 @@ final class MenuBarController {
             guard let self else { return }
 
             withObservationTracking {
-                _ = self.state.appState.configuration
-                _ = self.state.appState.mode
-                _ = self.state.appState.alwaysHiddenVisible
+                guard let state = self.state else { return }
+                _ = state.appState.configuration
+                _ = state.appState.mode
+                _ = state.appState.alwaysHiddenVisible
             } onChange: { [weak self] in
                 Task { @MainActor [weak self] in
                     guard let self, self.didStart, self.observationGeneration == generation else { return }
@@ -153,17 +128,12 @@ final class MenuBarController {
     private func scheduleInitialRetries() {
         cancelPendingRetries()
 
-        for (index, interval) in Self.initialRetryIntervals.enumerated() {
+        for interval in Self.initialRetryIntervals {
             let task = Task { @MainActor [weak self] in
                 try? await Task.sleep(for: interval)
                 guard let self, !Task.isCancelled else { return }
                 guard !self.host.hasValidOrdering else { return }
-                self.onRetryScheduled?(index + 1)
                 self.applyCurrentMode()
-
-                if index == Self.initialRetryIntervals.count - 1, !self.host.hasValidOrdering {
-                    self.onDegraded?()
-                }
             }
             retryTasks.append(task)
         }

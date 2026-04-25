@@ -15,6 +15,8 @@ final class MenuBarStore {
     @ObservationIgnored
     private var toggleDebounceTask: Task<Void, Never>?
     @ObservationIgnored
+    private var isToggleDebounced = false
+    @ObservationIgnored
     private var didBootstrap = false
 
     init() {
@@ -28,26 +30,6 @@ final class MenuBarStore {
 
         controller.onScreenParametersChanged = { [weak self] in
             self?.send(.screenParametersChanged)
-        }
-
-        controller.onInstallationStarted = { [weak self] in
-            self?.send(.platformInstallationStarted)
-        }
-
-        controller.onAwaitingOrderingValidation = { [weak self] in
-            self?.send(.platformAwaitingOrderingValidation)
-        }
-
-        controller.onPresentationApplied = { [weak self] in
-            self?.send(.platformPresentationApplied)
-        }
-
-        controller.onRetryScheduled = { [weak self] attempt in
-            self?.send(.platformRetryScheduled(attempt: attempt))
-        }
-
-        controller.onDegraded = { [weak self] in
-            self?.send(.platformDegraded)
         }
 
         controller.onQuitRequested = { [weak self] in
@@ -82,58 +64,23 @@ final class MenuBarStore {
             return .quit
 
         case .menuBarToggleRequested:
-            guard appState.isControllerRunning else { return .none }
-            guard !appState.isToggleDebounced else { return .none }
+            guard !isToggleDebounced else { return .none }
 
-            appState.isToggleDebounced = true
+            isToggleDebounced = true
             appState.mode.toggle()
             return .scheduleToggleDebounceReset
 
         case .alwaysHiddenToggleRequested:
-            guard appState.isControllerRunning else { return .none }
             appState.alwaysHiddenVisible.toggle()
-            return .none
-
-        case .screenParametersChanged:
-            guard appState.isControllerRunning else { return .none }
             return .applyCurrentMode
 
-        case .platformInstallationStarted:
-            appState.platformPhase = .installing
-            return .none
-
-        case .platformAwaitingOrderingValidation:
-            guard appState.isControllerRunning else { return .none }
-            appState.platformPhase = .awaitingOrderingValidation
-            return .none
-
-        case .platformPresentationApplied:
-            guard appState.isControllerRunning else { return .none }
-            appState.platformPhase = .applied
-            return .none
-
-        case let .platformRetryScheduled(attempt):
-            guard appState.isControllerRunning else { return .none }
-            switch appState.platformPhase {
-            case .awaitingOrderingValidation, .retryScheduled:
-                appState.platformPhase = .retryScheduled(attempt: attempt)
-            default:
-                return .none
-            }
-            return .none
-
-        case .platformDegraded:
-            guard appState.isControllerRunning else { return .none }
-            appState.platformPhase = .degraded
-            return .none
+        case .screenParametersChanged:
+            return .applyCurrentMode
         }
     }
 
     private func startControllerIfNeeded() {
-        guard !appState.isControllerRunning else { return }
-        appState.platformPhase = .installing
         controller.start()
-        appState.isControllerRunning = true
     }
 
     private func scheduleToggleDebounceReset() {
@@ -141,7 +88,7 @@ final class MenuBarStore {
         toggleDebounceTask = Task { @MainActor [weak self] in
             try? await Task.sleep(for: Self.toggleDebounceInterval)
             guard let self, !Task.isCancelled else { return }
-            self.appState.isToggleDebounced = false
+            self.isToggleDebounced = false
             self.toggleDebounceTask = nil
         }
     }
