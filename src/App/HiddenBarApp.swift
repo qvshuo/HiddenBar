@@ -6,7 +6,7 @@ struct HiddenBarApp: App {
     @State private var store = MenuBarStore.shared
 
     var body: some Scene {
-        MenuBarExtra("Hidden Bar", systemImage: store.menuBarExtraIconName, isInserted: .constant(false)) {
+        MenuBarExtra("Hidden Bar", systemImage: "circle.fill", isInserted: .constant(false)) {
             Button("Quit Hidden Bar") {
                 store.send(.quitRequested)
             }

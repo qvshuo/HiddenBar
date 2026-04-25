@@ -10,10 +10,6 @@ final class MenuBarStore {
 
     var appState = AppState()
 
-    var menuBarExtraIconName: String {
-        appState.mode == .collapsed ? "chevron.left" : "chevron.right"
-    }
-
     @ObservationIgnored
     private lazy var controller = MenuBarController(state: self)
     @ObservationIgnored

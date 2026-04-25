@@ -90,7 +90,6 @@ final class MenuBarController {
     func applyCurrentMode() {
         let presentation = currentPresentation(screenWidth: host.currentScreenWidth)
         host.setPresentation(
-            mode: presentation.mode,
             alwaysHiddenEnabled: presentation.alwaysHiddenEnabled,
             layout: presentation.layout
         )
@@ -111,7 +110,6 @@ final class MenuBarController {
         )
 
         return MenuBarPresentation(
-            mode: state.appState.mode,
             alwaysHiddenEnabled: state.appState.configuration.alwaysHiddenEnabled,
             layout: layout
         )

@@ -11,7 +11,6 @@ final class SystemStatusItemHost: NSObject, NSMenuDelegate {
     private var toggleItem: NSStatusItem?
     private var primarySeparatorItem: NSStatusItem?
     private var alwaysHiddenSeparatorItem: NSStatusItem?
-    private var pendingMode: MenuBarMode = .collapsed
     private var pendingAlwaysHiddenEnabled = false
     private var pendingLayout: MenuBarLayout?
     private var isApplyScheduled = false
@@ -54,14 +53,14 @@ final class SystemStatusItemHost: NSObject, NSMenuDelegate {
         separator.autosaveName = "hiddenbar.primary-separator"
 
         if let button = toggle.button {
-            button.image = collapseImage()
+            button.image = toggleImage()
             button.target = self
             button.action = #selector(handleToggleClick(_:))
             button.sendAction(on: [.leftMouseUp, .rightMouseUp])
         }
 
         if let button = separator.button {
-            button.image = separatorImage()
+            button.image = primarySeparatorImage()
             button.appearsDisabled = true
         }
 
@@ -71,11 +70,9 @@ final class SystemStatusItemHost: NSObject, NSMenuDelegate {
     }
 
     func setPresentation(
-        mode: MenuBarMode,
         alwaysHiddenEnabled: Bool,
         layout: MenuBarLayout
     ) {
-        pendingMode = mode
         pendingAlwaysHiddenEnabled = alwaysHiddenEnabled
         pendingLayout = layout
         schedulePendingApply()
@@ -149,28 +146,41 @@ final class SystemStatusItemHost: NSObject, NSMenuDelegate {
         toggleItem?.menu = nil
     }
 
-    private func collapseImage() -> NSImage? {
-        let image = NSImage(systemSymbolName: "chevron.left", accessibilityDescription: "Collapse Hidden Bar")
-        image?.isTemplate = true
+    private func toggleImage() -> NSImage {
+        let diameter: CGFloat = 5
+        let size = NSSize(width: diameter, height: diameter)
+        let image = NSImage(size: size)
+
+        image.lockFocus()
+        NSColor.white.setFill()
+        NSBezierPath(ovalIn: NSRect(origin: .zero, size: size)).fill()
+        image.unlockFocus()
+
         return image
     }
 
-    private func expandImage() -> NSImage? {
-        let image = NSImage(systemSymbolName: "chevron.right", accessibilityDescription: "Expand Hidden Bar")
-        image?.isTemplate = true
-        return image
+    private func primarySeparatorImage() -> NSImage {
+        separatorImage(dashPattern: nil)
     }
 
-    private func separatorImage() -> NSImage {
-        let size = NSSize(width: 2, height: 18)
+    private func alwaysHiddenSeparatorImage() -> NSImage {
+        separatorImage(dashPattern: [2, 2])
+    }
+
+    private func separatorImage(dashPattern: [CGFloat]?) -> NSImage {
+        let lineWidth: CGFloat = 2
+        let size = NSSize(width: lineWidth, height: 18)
         let image = NSImage(size: size)
         image.isTemplate = true
 
         image.lockFocus()
         let path = NSBezierPath()
-        path.move(to: NSPoint(x: 0.5, y: 2))
-        path.line(to: NSPoint(x: 0.5, y: size.height - 2))
-        path.lineWidth = 1
+        path.move(to: NSPoint(x: lineWidth / 2, y: 2))
+        path.line(to: NSPoint(x: lineWidth / 2, y: size.height - 2))
+        path.lineWidth = lineWidth
+        if let dashPattern {
+            path.setLineDash(dashPattern, count: dashPattern.count, phase: 0)
+        }
         NSColor.black.setStroke()
         path.stroke()
         image.unlockFocus()
@@ -192,17 +202,15 @@ final class SystemStatusItemHost: NSObject, NSMenuDelegate {
     }
 
     private func applyPendingPresentation() {
-        guard let toggleItem, let primarySeparatorItem, let pendingLayout else {
+        guard let primarySeparatorItem, let pendingLayout else {
             return
         }
-
-        toggleItem.button?.image = pendingMode == .collapsed ? expandImage() : collapseImage()
 
         if pendingAlwaysHiddenEnabled {
             if alwaysHiddenSeparatorItem == nil {
                 let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
                 item.autosaveName = "hiddenbar.always-hidden-separator"
-                item.button?.image = separatorImage()
+                item.button?.image = alwaysHiddenSeparatorImage()
                 item.button?.appearsDisabled = true
                 alwaysHiddenSeparatorItem = item
             }
