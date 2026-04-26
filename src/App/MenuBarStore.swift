@@ -7,7 +7,7 @@ final class MenuBarStore {
     static let shared = MenuBarStore()
 
     private static let toggleDebounceInterval: Duration = .seconds(0.3)
-    private static let autoHideInterval: Duration = .seconds(15)
+    private static let autoHideInterval: Duration = .seconds(30)
 
     var appState = AppState()
 

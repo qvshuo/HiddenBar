@@ -44,7 +44,7 @@ Open `Hidden Bar.xcodeproj` in Xcode and build.
 
 - **Auto-hide**
 
-  Expanded items automatically collapse after 15 seconds.
+  Expanded items automatically collapse after 30 seconds.
 
 ## Requirements
 
