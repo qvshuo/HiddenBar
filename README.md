@@ -48,7 +48,8 @@ Open `Hidden Bar.xcodeproj` in Xcode and build.
 
 ## Requirements
 
-macOS 26.0 or later.
+- macOS 26+
+- Apple Silicon
 
 ## License
 
