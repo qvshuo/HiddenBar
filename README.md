@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="128" height="128" src="img/icon_512@2x.png" alt="Hidden Bar icon">
+  <img width="200" height="200" src="src/Assets.xcassets/AppIcon.appiconset/icon_512@2x.png">
 </p>
 
 # Hidden Bar
@@ -31,7 +31,7 @@ Open `Hidden Bar.xcodeproj` in Xcode and build.
   2. Click the **dot icon** to toggle their visibility.
 
   <p align="center">
-    <img src="img/hide-items.gif" alt="Hide menu bar items demo">
+    <img src="img/hide-items.gif">
   </p>
 
 - **Toggle always-hidden items**
@@ -39,7 +39,7 @@ Open `Hidden Bar.xcodeproj` in Xcode and build.
   Hold **⌥ Option** and click the dot icon to show or hide items in the always-hidden section.
 
   <p align="center">
-    <img src="img/always-hidden.gif" alt="Toggle always-hidden items demo">
+    <img src="img/always-hidden.gif">
   </p>
 
 - **Auto-hide**
