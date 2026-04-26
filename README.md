@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="200" height="200" src="src/Assets.xcassets/AppIcon.appiconset/icon_512@2x.png">
+  <img width="128" height="128" src="src/Assets.xcassets/AppIcon.appiconset/icon_512@2x.png">
 </p>
 
 # Hidden Bar
