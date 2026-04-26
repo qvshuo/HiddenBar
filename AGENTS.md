@@ -73,4 +73,4 @@ src/
 - **Swift version:** 6.0 (`SWIFT_STRICT_CONCURRENCY = complete`)
 - **Xcode:** 26.x (objectVersion 56)
 - **Bundle ID:** `art.anjing.HiddenBar`
-- **Version:** `1.2.0`
+- **Version:** `1.2.1`
