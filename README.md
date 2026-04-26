@@ -6,7 +6,7 @@
 
 A modern, lightweight macOS utility that hides menu bar icons.
 
-This project is a modern rewrite of [dwarvesf/hidden](https://github.com/dwarvesf/hidden).
+This project is a modern, simplified rewrite of [dwarvesf/hidden](https://github.com/dwarvesf/hidden).
 
 ## Installation
 
