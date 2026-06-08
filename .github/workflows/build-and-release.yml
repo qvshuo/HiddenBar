@@ -16,8 +16,8 @@ jobs:
       - name: Build
         run: |
           xcodebuild \
-            -project "Hidden Bar.xcodeproj" \
-            -scheme "Hidden Bar" \
+            -project "Curtain.xcodeproj" \
+            -scheme "Curtain" \
             -configuration Release \
             -derivedDataPath DerivedData \
             CODE_SIGN_IDENTITY="-" \
@@ -27,10 +27,10 @@ jobs:
 
       - name: Package
         run: |
-          APP_PATH="DerivedData/Build/Products/Release/Hidden Bar.app"
+          APP_PATH="DerivedData/Build/Products/Release/Curtain.app"
           VERSION=$(plutil -extract CFBundleShortVersionString raw "${APP_PATH}/Contents/Info.plist")
           BUILD=$(plutil -extract CFBundleVersion raw "${APP_PATH}/Contents/Info.plist")
-          ZIP_NAME="HiddenBar-${VERSION}.zip"
+          ZIP_NAME="Curtain-${VERSION}.zip"
 
           ditto -c -k --keepParent "${APP_PATH}" "${ZIP_NAME}"
 

@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "929113F021F9D04100173149"
-               BuildableName = "Hidden Bar.app"
-               BlueprintName = "Hidden Bar"
-               ReferencedContainer = "container:Hidden Bar.xcodeproj">
+               BuildableName = "Curtain.app"
+               BlueprintName = "Curtain"
+               ReferencedContainer = "container:Curtain.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,9 +45,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "929113F021F9D04100173149"
-            BuildableName = "Hidden Bar.app"
-            BlueprintName = "Hidden Bar"
-            ReferencedContainer = "container:Hidden Bar.xcodeproj">
+             BuildableName = "Curtain.app"
+             BlueprintName = "Curtain"
+             ReferencedContainer = "container:Curtain.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "929113F021F9D04100173149"
-            BuildableName = "Hidden Bar.app"
-            BlueprintName = "Hidden Bar"
-            ReferencedContainer = "container:Hidden Bar.xcodeproj">
+             BuildableName = "Curtain.app"
+             BlueprintName = "Curtain"
+             ReferencedContainer = "container:Curtain.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

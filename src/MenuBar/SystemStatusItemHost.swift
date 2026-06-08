@@ -47,10 +47,10 @@ final class SystemStatusItemHost: NSObject, NSMenuDelegate {
         }
 
         let toggle = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-        toggle.autosaveName = "hiddenbar.toggle"
+        toggle.autosaveName = "curtain.toggle"
 
         let separator = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-        separator.autosaveName = "hiddenbar.primary-separator"
+        separator.autosaveName = "curtain.primary-separator"
 
         if let button = toggle.button {
             button.image = toggleImage()
@@ -107,7 +107,7 @@ final class SystemStatusItemHost: NSObject, NSMenuDelegate {
         let menu = NSMenu()
         menu.delegate = self
         menu.addItem(
-            NSMenuItem(title: "Quit Hidden Bar", action: #selector(quitApplication), keyEquivalent: "")
+            NSMenuItem(title: "Quit Curtain", action: #selector(quitApplication), keyEquivalent: "")
         )
         menu.items.forEach { $0.target = self }
         return menu
@@ -181,7 +181,7 @@ final class SystemStatusItemHost: NSObject, NSMenuDelegate {
         if pendingAlwaysHiddenEnabled {
             if alwaysHiddenSeparatorItem == nil {
                 let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-                item.autosaveName = "hiddenbar.always-hidden-separator"
+                item.autosaveName = "curtain.always-hidden-separator"
                 item.button?.image = alwaysHiddenSeparatorImage()
                 item.button?.appearsDisabled = true
                 alwaysHiddenSeparatorItem = item

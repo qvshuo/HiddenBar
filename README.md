@@ -2,7 +2,7 @@
   <img width="128" height="128" src="src/Assets.xcassets/AppIcon.appiconset/icon_512@2x.png">
 </p>
 
-# Hidden Bar
+# Curtain
 
 A modern, lightweight macOS utility that hides menu bar icons.
 
@@ -12,17 +12,17 @@ This project is a modern, simplified rewrite of [dwarvesf/hidden](https://github
 
 ### Download the latest release
 
-Download the pre-built app from [GitHub Releases](https://github.com/qvshuo/HiddenBar/releases/latest), unzip, and move it to your **Applications** folder.
+Download the pre-built app from [GitHub Releases](https://github.com/qvshuo/Curtain/releases/latest), unzip, and move it to your **Applications** folder.
 
 Before launching the app, run:
 
 ```bash
-xattr -cr "/Applications/Hidden Bar.app"
+xattr -cr "/Applications/Curtain.app"
 ```
 
 ### Build from source
 
-Open `Hidden Bar.xcodeproj` in Xcode and build.
+Open `Curtain.xcodeproj` in Xcode and build.
 
 ## Usage
 
